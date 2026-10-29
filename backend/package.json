@@ -15,7 +15,8 @@
   },
   "scripts": {
     "dev":"node --watch server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "npx puppeteer browsers install chrome"
   },
   "name": "backend",
   "version": "1.0.0",
