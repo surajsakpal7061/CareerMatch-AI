@@ -109,6 +109,7 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
+                
 
                 {/* Card Footer */}
                 <div className='interview-card__footer'>
