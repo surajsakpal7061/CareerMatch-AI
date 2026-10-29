@@ -9,7 +9,7 @@ const ai = new GoogleGenAI({
 
 const chromePath = puppeteer.executablePath();
 
-console.log("Puppeteer version:", puppeteer.version());
+
 console.log("Chrome executable:", chromePath);
 console.log("Chrome exists:", fs.existsSync(chromePath));
 
