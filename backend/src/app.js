@@ -6,7 +6,7 @@ const cors = require("cors");
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin:process.env.VITE_INTERVIEW_APP_API_BASE_URL,
+    origin:process.env.VITE_INTERVIEW_APP_API_BASE_URL || "http://localhost:5173",
     credentials:true
 }))
 

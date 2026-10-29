@@ -69,41 +69,30 @@ const getUserAllReports = async (req, res) => {
 
 const generateResumePdfController = async (req, res) => {
     try {
-        const { interviewReportId } = req.params;
+        console.log("Starting PDF generation...");
+        console.log("Puppeteer cache:", process.env.PUPPETEER_CACHE_DIR);
 
-        const interviewReport =
-            await interviewReportModel.findById(interviewReportId);
-
-        if (!interviewReport) {
-            return res.status(404).json({
-                message: "Interview report not found"
-            });
-        }
-
-        const { resume, selfDescription, jobDescription } =
-            interviewReport;
-
-        const pdfBuffer = await generateResumePdf({
-            resume,
-            selfDescription,
-            jobDescription
+        browser = await puppeteer.launch({
+            headless: true,
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
         });
 
-        res.set({
-            "Content-Type": "application/pdf",
-            "Content-Disposition":
-                `attachment; filename=resume_${interviewReportId}.pdf`,
-            "Content-Length": pdfBuffer.length
+        console.log("Chrome launched successfully");
+
+        const page = await browser.newPage();
+        await page.setContent(html, { waitUntil: "networkidle0" });
+
+        return await page.pdf({
+            format: "A4",
+            printBackground: true,
         });
-
-        return res.send(pdfBuffer);
-
     } catch (error) {
-        console.error("Resume PDF generation failed:", error);
-
-        return res.status(500).json({
-            message: "Failed to generate resume PDF"
-        });
+        console.error("PDF GENERATION ERROR:", error.stack || error);
+        throw error;
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
     }
 };
 
