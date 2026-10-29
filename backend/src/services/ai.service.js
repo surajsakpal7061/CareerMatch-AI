@@ -8,12 +8,13 @@ const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY
 })
 
-const chromePath = puppeteer.executablePath();
 
-console.log(
-    "Puppeteer version:",
+console.log("Puppeteer version:",
     require("puppeteer/package.json").version
 );
+
+const chromePath = puppeteer.executablePath();
+
 console.log("Chrome executable:", chromePath);
 console.log("Chrome exists:", fs.existsSync(chromePath));
 
@@ -152,7 +153,7 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
                         The content should be ATS friendly, i.e. it should be easily parsable by ATS systems without losing important information.
                         The resume should not be so lengthy, it should ideally be 1-2 pages long when converted to PDF. Focus on quality rather than quantity and make sure to include all the relevant information that can increase the candidate's chances of getting an interview call for the given job description.
                   `
-        
+
 
     const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
