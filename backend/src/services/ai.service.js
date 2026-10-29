@@ -1,6 +1,7 @@
 const puppeteer = require("puppeteer")
 const { GoogleGenAI } = require("@google/genai")
 const { z } = require("zod")
+const fs = require("fs");
 
 
 const ai = new GoogleGenAI({
