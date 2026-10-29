@@ -66,7 +66,8 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
 
 }
 
-const generatePdfFromHtml = async (html) => {
+
+async function generatePdfFromHtml({ htmlContent }) {
     let browser;
 
     try {
@@ -74,28 +75,50 @@ const generatePdfFromHtml = async (html) => {
 
         browser = await puppeteer.launch({
             headless: true,
-            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+            args: [
+                "--no-sandbox",
+                "--disable-setuid-sandbox"
+            ]
         });
+
+        console.log("Chrome launched successfully");
 
         const page = await browser.newPage();
 
-        await page.setContent(html, {
-            waitUntil: "networkidle0",
+        await page.setContent(htmlContent, {
+            waitUntil: "networkidle0"
         });
 
-        return await page.pdf({
+        const pdfBuffer = await page.pdf({
             format: "A4",
             printBackground: true,
+            margin: {
+                top: "20mm",
+                bottom: "20mm",
+                left: "15mm",
+                right: "15mm"
+            }
         });
+
+        console.log("PDF generated successfully");
+
+        return pdfBuffer;
+
     } catch (error) {
-        console.error("PDF GENERATION ERROR:", error.stack || error);
+        console.error(
+            "PDF generation failed:",
+            error.stack || error
+        );
+
         throw error;
+
     } finally {
         if (browser) {
             await browser.close();
         }
     }
-};
+}
+
 
 
 async function generateResumePdf({ resume, selfDescription, jobDescription }) {
@@ -119,7 +142,7 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
                         The content should be ATS friendly, i.e. it should be easily parsable by ATS systems without losing important information.
                         The resume should not be so lengthy, it should ideally be 1-2 pages long when converted to PDF. Focus on quality rather than quantity and make sure to include all the relevant information that can increase the candidate's chances of getting an interview call for the given job description.
                   `
-
+        
 
     const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
