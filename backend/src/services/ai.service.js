@@ -1,6 +1,7 @@
 const puppeteer = require("puppeteer")
 const { GoogleGenAI } = require("@google/genai")
 const { z } = require("zod")
+const fs = require("fs");
 
 
 const ai = new GoogleGenAI({
@@ -9,7 +10,10 @@ const ai = new GoogleGenAI({
 
 const chromePath = puppeteer.executablePath();
 
-console.log("Puppeteer version:", puppeteer.version());
+console.log(
+    "Puppeteer version:",
+    require("puppeteer/package.json").version
+);
 console.log("Chrome executable:", chromePath);
 console.log("Chrome exists:", fs.existsSync(chromePath));
 
