@@ -69,6 +69,8 @@ const getUserAllReports = async (req, res) => {
 
 const generateResumePdfController = async (req, res) => {
     try {
+
+        console.log("Generating resume PDF...");
         const { interviewReportId } = req.params;
 
         const interviewReport =
